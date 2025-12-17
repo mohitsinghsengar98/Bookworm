@@ -20,11 +20,17 @@ struct CurvedButton:View {
 }
 
 struct ContentView: View {
+    @AppStorage("notes") private var notes = ""
     @State private var rememberMe: Bool = false
+    @State private var name: String = ""
     
     var body: some View {
         CurvedButton(message: "Toggle", rememberMe: $rememberMe)
         Text(rememberMe ? "ON" : "OFF")
+        Form{
+//            TextField("Enter name", text: $name, axis: .vertical).font(.subheadline).padding()
+            TextEditor(text: $notes) // text editor will be scrollable on its own.
+        }
     }
 }
 
