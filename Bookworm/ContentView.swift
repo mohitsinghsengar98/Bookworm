@@ -7,15 +7,24 @@
 
 import SwiftUI
 
-struct ContentView: View {
+struct CurvedButton:View {
+    var message:String = ""
+    @Binding var rememberMe:Bool
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-        }
-        .padding()
+        Button(message){
+            rememberMe.toggle()
+        }.font(.title).buttonStyle(.bordered).padding()
+        
+    }
+}
+
+struct ContentView: View {
+    @State private var rememberMe: Bool = false
+    
+    var body: some View {
+        CurvedButton(message: "Toggle", rememberMe: $rememberMe)
+        Text(rememberMe ? "ON" : "OFF")
     }
 }
 
