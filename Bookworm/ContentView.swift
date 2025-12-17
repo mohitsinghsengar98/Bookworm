@@ -6,30 +6,32 @@
 //
 
 import SwiftUI
-
-struct CurvedButton:View {
-    var message:String = ""
-    @Binding var rememberMe:Bool
-    
-    var body: some View {
-        Button(message){
-            rememberMe.toggle()
-        }.font(.title).buttonStyle(.bordered).padding()
-        
-    }
-}
+import SwiftData
 
 struct ContentView: View {
-    @AppStorage("notes") private var notes = ""
-    @State private var rememberMe: Bool = false
-    @State private var name: String = ""
+    @Environment(\.modelContext) var modelContext
+    @Query var students : [Student]
+    let firstNameList = ["Mohit", "Rohit", "Sohan", "Mohan", "Udit", "Saurav", "Narayan", "Pavan", "Aman", "Shubham"]
+    let lastNameList = ["Sengar", "Kumar", "Serawat", "Rawat"]
     
     var body: some View {
-        CurvedButton(message: "Toggle", rememberMe: $rememberMe)
-        Text(rememberMe ? "ON" : "OFF")
-        Form{
-//            TextField("Enter name", text: $name, axis: .vertical).font(.subheadline).padding()
-            TextEditor(text: $notes) // text editor will be scrollable on its own.
+        NavigationStack{
+            List(students){student in
+                Text(student.name)
+            }.navigationTitle("Classroom")
+                .toolbar{
+                    Button("Add"){
+                        
+                        
+                        let chooseFirstName = firstNameList.randomElement()!
+                        let chooseLastName = lastNameList.randomElement()!
+                        
+                        let student  =   Student(id: UUID(), name: "\(chooseFirstName) \(chooseLastName)")
+                        
+                        modelContext.insert(student)
+                        
+                    }
+                }
         }
     }
 }
