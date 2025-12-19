@@ -6,16 +6,45 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) var modelContext
+    @Query(sort: \Book.rating, order: .reverse) var books : [Book] // maximum Rating
+    @State private var showingAddBookSheet = false
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        NavigationStack{
+            List{
+                ForEach(books){book in
+                    NavigationLink(value:book){
+                        HStack{
+                            EmojiRatingView(rating: book.rating)
+                                .font(.largeTitle)
+                            
+                            VStack(alignment: .leading){
+                                Text(book.title).font(.headline)
+                                Text(book.author).foregroundStyle(.secondary)
+                            }
+                        }
+                    }.navigationDestination(for: Book.self){ book in
+                        DetailView(book:book)
+                    }
+                }
+                
+            }.navigationTitle("Books")
+                .toolbar{
+                    ToolbarItem(placement: .topBarTrailing){
+                        Button{
+                            showingAddBookSheet = true
+                        } label:{
+                            Image(systemName: "plus")
+                        }
+                    }
+                }.sheet(isPresented: $showingAddBookSheet){
+                    AddBookView()
+                }
         }
-        .padding()
     }
 }
 
