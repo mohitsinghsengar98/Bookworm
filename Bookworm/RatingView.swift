@@ -23,8 +23,8 @@ struct RatingView: View {
         HStack{
             if label.isEmpty ==  false{
                 Text(label)
+                Spacer()
             }
-            Spacer()
             
             ForEach(1..<(maxRating+1),id:\.self){ number in
                 Button{
@@ -33,7 +33,7 @@ struct RatingView: View {
                     image(for: number).foregroundStyle(number > rating ? offColour : onColour)
                 }
             }
-        }.buttonStyle(.plain)
+        }.frame(maxWidth: .infinity).buttonStyle(.plain)
     }
     
     func image(for number:Int) -> Image{

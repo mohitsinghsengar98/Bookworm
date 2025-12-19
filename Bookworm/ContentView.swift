@@ -27,8 +27,6 @@ struct ContentView: View {
                                 Text(book.author).foregroundStyle(.secondary)
                             }
                         }
-                    }.navigationDestination(for: Book.self){ book in
-                        DetailView(book:book)
                     }
                 }
                 
@@ -43,6 +41,8 @@ struct ContentView: View {
                     }
                 }.sheet(isPresented: $showingAddBookSheet){
                     AddBookView()
+                }.navigationDestination(for: Book.self){ book in
+                    DetailView(book:book)
                 }
         }
     }
